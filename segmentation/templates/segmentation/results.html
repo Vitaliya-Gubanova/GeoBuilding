@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История результатов</title>
+    <link rel="stylesheet" href="{% static 'segmentation/css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">📊 История результатов сегментации</h1>
+            <a href="/" class="btn btn-secondary">Вернуться на главную</a>
+        </header>
+
+        <main class="main-content">
+            {% if results %}
+                <div class="results-list">
+                    {% for result in results %}
+                        <div class="result-card">
+                            <div class="result-header">
+                                <h3>Результат #{{ result.id }}</h3>
+                                <span class="result-date">{{ result.created_at|date:"d.m.Y H:i" }}</span>
+                            </div>
+                            <div class="result-stats">
+                                <div class="stat-badge">
+                                    <span class="stat-label">Площадь:</span>
+                                    <span class="stat-value">{{ result.area_m2|floatformat:2 }} м²</span>
+                                </div>
+                            </div>
+                            <div class="result-images">
+                                <div class="result-image-item">
+                                    <h4>Оригинал</h4>
+                                    <img src="{{ result.original_image.url }}" alt="Оригинальное изображение">
+                                </div>
+                                <div class="result-image-item">
+                                    <h4>Маска</h4>
+                                    <img src="{{ result.result_mask.url }}" alt="Маска сегментации">
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>Пока нет сохраненных результатов</p>
+                    <a href="/" class="btn btn-primary">Обработать изображение</a>
+                </div>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>
+
